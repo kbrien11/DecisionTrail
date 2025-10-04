@@ -1,6 +1,9 @@
 import requests
 from decouple import config
 import requests
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from rest_framework.authtoken.models import Token
 
 
 SLACK_BOT_TOKEN = config("SLACK_BOT_TOKEN")
@@ -125,3 +128,26 @@ def open_decision_modal(trigger_id, decision_text, user_id, username):
     )
 
     return response.json()
+
+
+def get_user_teams(auth_token):
+
+    try:
+        token = Token.objects.get(key=auth_token)
+        user = token.user
+        teams = (
+            user.teams
+            if isinstance(user.teams, list)
+            else list(user.teams.values_list("name", flat=True))
+        )
+        return teams
+    except Token.DoesNotExist:
+        return JsonResponse({"error": "Invalid auth_token"}, status=401)
+
+
+def verify_token(token_key):
+    try:
+        token = Token.objects.get(key=token_key)
+        return token.user  # ✅ Authenticated user
+    except Token.DoesNotExist:
+        return None

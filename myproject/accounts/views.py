@@ -8,6 +8,7 @@ from rest_framework.decorators import action, api_view
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.contrib.auth import authenticate
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -15,6 +16,7 @@ from django.contrib.auth import authenticate
 
 @api_view(["POST"])
 def createUser(request):
+    print(request)
     try:
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -56,14 +58,27 @@ def login(request):
     token, _ = Token.objects.get_or_create(user=user)
     ser = UserSerializer(user)
 
-    return Response(
+    # ✅ Create JsonResponse so we can attach cookie
+    response = JsonResponse(
         {
             "username": ser.data["username"],
             "id": ser.data["id"],
-            "token": token.key,
             "status": status.HTTP_200_OK,
         }
     )
+
+    # ✅ Set secure, HTTP-only cookie
+    response.set_cookie(
+        key="authToken",
+        value=token.key,
+        httponly=True,
+        secure=False,  # Only over HTTPS
+        samesite="Lax",  # Prevent cross-site leakage
+        max_age=3600,
+        domain="http://localhost:3000",
+    )
+
+    return response
 
 
 # Create your views here.

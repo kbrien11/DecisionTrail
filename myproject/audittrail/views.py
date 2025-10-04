@@ -3,11 +3,14 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
-from .utils import open_decision_modal
+from rest_framework import status
+from .serializers import PaginatorSerializer
+from .utils import open_decision_modal, get_user_teams, verify_token
 from .models import Decision
 from rest_framework.decorators import action, api_view
 from django.core.cache import cache
 from decouple import config
+from django.core.paginator import Paginator
 
 
 SLACK_BOT_TOKEN = config("SLACK_BOT_TOKEN")
@@ -136,4 +139,77 @@ def slack_command(request):
                 },
             ],
         }
+    )
+
+
+@api_view(["GET"])
+def get_decisions_by_company(request):
+    company_domain = request.GET.get("company_domain")
+    page_number = int(request.GET.get("page", 1))  # default to page 1
+    page_size = int(request.GET.get("page_size", 2))
+    auth_token = request.COOKIES.get("authToken")  # default to 2 per page
+
+    if not company_domain:
+        return JsonResponse({"error": "Missing company_domain"}, status=400)
+
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    user_teams = get_user_teams(auth_token)
+
+    # Start with base queryset
+    decisions = Decision.objects.filter(company_domain=company_domain)
+
+    # Apply dynamic filters
+    allowed_filters = {
+        "tags": "tags__icontains",
+        "team": "team__icontains",
+        "username": "username__icontains",
+        "context": "context__icontains",
+        "rationale": "rationale__icontains",
+    }
+    for param, lookup in allowed_filters.items():
+        value = request.GET.get(param)
+        if value:
+            # Cast booleans and numbers if needed
+            if param == "review_flag":
+                value = value.lower() == "true"
+            elif param == "confidence":
+                try:
+                    value = int(value)
+                except ValueError:
+                    continue
+            decisions = decisions.filter(**{lookup: value})
+
+    paginator = Paginator(decisions.order_by("-created_at"), page_size)
+    page_obj = paginator.get_page(page_number)
+
+    data = [
+        {
+            "id": d.id,
+            "summary": d.summary,
+            "context": d.context,
+            "tags": d.tags,
+            "team": d.team,
+            "review_flag": d.review_flag,
+            "jira_url": d.jira_url,
+            "created_at": d.created_at.isoformat(),
+            "username": d.username,
+        }
+        for d in page_obj
+    ]
+
+    return JsonResponse(
+        {
+            "decisions": data,
+            "teams": user_teams,
+            "status": status.HTTP_200_OK,
+            "page_size": page_size,
+            "total_items": paginator.count,
+            "total_pages": paginator.num_pages,
+            "current_page": page_obj.has_previous(),
+            "has_next": page_obj.has_next(),
+            "has_previous": page_obj.has_previous(),
+        },
+        status=200,
     )

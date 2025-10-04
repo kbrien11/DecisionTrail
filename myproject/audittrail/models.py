@@ -17,6 +17,14 @@ class Decision(models.Model):
     rationale = models.TextField()
     jira_url = models.URLField(max_length=500, null=True, blank=True)
 
+
+class CustomPaginator(models.Model):
+    total_items = models.IntegerField(default="", blank=True, null=True)
+    total_pages = models.IntegerField(default="", blank=True, null=True)
+    current_page = models.IntegerField(default="", blank=True, null=True)
+    has_next = models.BooleanField(default="", blank=True, null=True)
+    has_previous = models.BooleanField(default="", blank=True, null=True)
+
     def __str__(self):
         return f"{self.timestamp.strftime('%Y-%m-%d')} | {self.username}: {self.summary[:50]}"
 

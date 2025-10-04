@@ -8,4 +8,9 @@ urlpatterns = [
     path("captureDecision", views.slack_decision, name="slack_decision"),
     path("interactivity", views.slack_interactivity, name="slack_decision"),
     path("command", views.slack_command, name="command"),
+    path(
+        "api/decisions",
+        views.get_decisions_by_company,
+        name="get_decisions_by_company",
+    ),
 ]
