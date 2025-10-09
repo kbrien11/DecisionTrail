@@ -7,11 +7,11 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, max_length=20)
     username = models.CharField(unique=True, max_length=20)
     company = models.CharField(max_length=50, blank=True, unique=True)
-    teams = ArrayField(
+    projects = ArrayField(
         base_field=models.CharField(max_length=100),
         blank=True,
         default=list,
-        help_text="List of team names the user has access to",
+        help_text="List of projects the user has access to",
     )
 
     def __str__(self):

@@ -1,7 +1,9 @@
 # views.py
+from collections import defaultdict
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.db.models import Count, Q
 import requests
 from rest_framework import status
 from .serializers import PaginatorSerializer
@@ -145,6 +147,7 @@ def slack_command(request):
 @api_view(["GET"])
 def get_decisions_by_company(request):
     company_domain = request.GET.get("company_domain")
+    project = request.GET.get("project")
     page_number = int(request.GET.get("page", 1))  # default to page 1
     page_size = int(request.GET.get("page_size", 2))
     auth_token = request.COOKIES.get("authToken")  # default to 2 per page
@@ -158,7 +161,7 @@ def get_decisions_by_company(request):
     user_teams = get_user_teams(auth_token)
 
     # Start with base queryset
-    decisions = Decision.objects.filter(company_domain=company_domain)
+    decisions = Decision.objects.filter(company_domain=company_domain, project=project)
 
     # Apply dynamic filters
     allowed_filters = {
@@ -195,6 +198,7 @@ def get_decisions_by_company(request):
             "jira_url": d.jira_url,
             "created_at": d.created_at.isoformat(),
             "username": d.username,
+            "rationale": d.rationale,
         }
         for d in page_obj
     ]
@@ -202,7 +206,7 @@ def get_decisions_by_company(request):
     return JsonResponse(
         {
             "decisions": data,
-            "teams": user_teams,
+            "projects": user_teams,
             "status": status.HTTP_200_OK,
             "page_size": page_size,
             "total_items": paginator.count,
@@ -213,3 +217,67 @@ def get_decisions_by_company(request):
         },
         status=200,
     )
+
+
+@api_view(["GET"])
+def team_audit_summary(request):
+    company_domain = request.GET.get("company_domain")
+    project = request.GET.get("project")
+    auth_token = request.COOKIES.get("authToken")
+
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+    if not company_domain:
+        return JsonResponse({"error": "Missing company_domain"}, status=400)
+
+    # Aggregate counts by team and status
+    teams = (
+        Decision.objects.filter(company_domain=company_domain, project=project)
+        .values("team")
+        .annotate(
+            Open=Count("id", filter=Q(status="open")),
+            Closed=Count("id", filter=Q(status="closed")),
+        )
+        .order_by("team")
+    )
+
+    return JsonResponse({"teams": list(teams), "company": company_domain}, status=200)
+
+
+@api_view(["GET"])
+def decision_summary_by_team(request):
+    company_domain = request.GET.get("company_domain")
+    project = request.GET.get("project")
+
+    auth_token = request.COOKIES.get("authToken")
+
+    # if not auth_token or not verify_token(auth_token):
+    #     return JsonResponse({"error": "Unauthorized"}, status=401)
+
+    if not company_domain:
+        return JsonResponse({"error": "Missing company_domain"}, status=400)
+
+    decisions = Decision.objects.filter(company_domain=company_domain, project=project)
+
+    team_data = defaultdict(
+        lambda: {"team_name": "", "decision_count": 0, "tags": set()}
+    )
+
+    for decision in decisions:
+        team_name = decision.team
+        tag_list = [tag.strip() for tag in decision.tags.split(",") if tag.strip()]
+
+        team_data[team_name]["team_name"] = team_name
+        team_data[team_name]["decision_count"] += 1
+        team_data[team_name]["tags"].update(tag_list)
+
+    result = [
+        {
+            "name": data["team_name"],
+            "count": data["decision_count"],
+            "tags": sorted(data["tags"]),
+        }
+        for data in team_data.values()
+    ]
+
+    return JsonResponse({"data": result})

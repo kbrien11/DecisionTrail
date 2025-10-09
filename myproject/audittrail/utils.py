@@ -136,8 +136,8 @@ def get_user_teams(auth_token):
         token = Token.objects.get(key=auth_token)
         user = token.user
         teams = (
-            user.teams
-            if isinstance(user.teams, list)
+            user.projects
+            if isinstance(user.projects, list)
             else list(user.teams.values_list("name", flat=True))
         )
         return teams

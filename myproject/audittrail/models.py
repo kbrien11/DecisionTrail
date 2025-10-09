@@ -1,5 +1,6 @@
 # models.py
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class Decision(models.Model):
@@ -7,6 +8,7 @@ class Decision(models.Model):
     username = models.CharField(max_length=100)
     company_id = models.CharField(max_length=50)
     company_domain = models.CharField(max_length=100)
+    project = models.CharField(max_length=100)
     summary = models.TextField()
     context = models.TextField()
     team = models.CharField(max_length=100)
@@ -16,6 +18,7 @@ class Decision(models.Model):
     review_flag = models.BooleanField(default=False)
     rationale = models.TextField()
     jira_url = models.URLField(max_length=500, null=True, blank=True)
+    status = models.CharField(max_length=100, default="open")
 
 
 class CustomPaginator(models.Model):

@@ -64,6 +64,8 @@ def login(request):
             "username": ser.data["username"],
             "id": ser.data["id"],
             "status": status.HTTP_200_OK,
+            "company": ser.data["company"],
+            "projects": ser.data["projects"],
         }
     )
 
@@ -75,7 +77,7 @@ def login(request):
         secure=False,  # Only over HTTPS
         samesite="Lax",  # Prevent cross-site leakage
         max_age=3600,
-        domain="http://localhost:3000",
+        domain="localhost",
     )
 
     return response

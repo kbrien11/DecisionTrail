@@ -13,4 +13,14 @@ urlpatterns = [
         views.get_decisions_by_company,
         name="get_decisions_by_company",
     ),
+    path(
+        "api/analytics",
+        views.team_audit_summary,
+        name="get_team_audit_summary",
+    ),
+    path(
+        "api/getTeams",
+        views.decision_summary_by_team,
+        name="get_decision_summary_by_team",
+    ),
 ]
