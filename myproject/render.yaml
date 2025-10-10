@@ -3,10 +3,10 @@ services:
     name: django-web
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn MyProject.wsgi:application
+    startCommand: gunicorn myproject.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: MyProject.settings
+        value: myproject.settings
       - key: SECRET_KEY
         value: 9edo6aecv)dund-8gw7=u_k*ujiw(#d4#dvo%_x8@vr&ng(tv5
       - key: DATABASE_URL
