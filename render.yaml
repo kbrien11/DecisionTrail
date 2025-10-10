@@ -22,7 +22,7 @@ services:
           property: connectionString
 
 databases:
-  - name: decisiontrail
+  - name: auditTrail
     plan: starter
-    databaseName: decisiontrail
-    user: decisiontrail
+    databaseName: auditTrail
+    user: auditTrail
