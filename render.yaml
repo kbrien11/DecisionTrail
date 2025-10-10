@@ -18,7 +18,7 @@ services:
         value: .
       - key: DATABASE_URL
         fromDatabase:
-          name: decisiontrail
+          name: auditTrail
           property: connectionString
 
 databases:
