@@ -11,10 +11,11 @@ services:
         value: 9edo6aecv)dund-8gw7=u_k*ujiw(#d4#dvo%_x8@vr&ng(tv5
       - key: DATABASE_URL
         fromDatabase:
-          name: django-db
+          name: decisiontrail
           property: connectionString
 
 databases:
-  - name: django-db
-    databaseName: django
-    user: django
+  - name: decisiontrail
+    plan: starter
+    databaseName: decisiontrail
+    user: decisiontrail
