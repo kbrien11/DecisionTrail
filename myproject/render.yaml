@@ -3,7 +3,13 @@ services:
     name: django-web
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn myproject.wsgi:application
+    startCommand: |
+        echo "Current directory:"
+        pwd
+        echo "Contents:"
+        ls -la
+        echo "Trying to run gunicorn..."
+    gunicorn myproject.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: myproject.settings
