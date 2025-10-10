@@ -42,3 +42,5 @@ urllib3==2.5.0
 virtualenv==20.14.1
 Werkzeug==2.2.1
 xlwt==1.3.0
+setuptools>=65.0.0
+wheel
