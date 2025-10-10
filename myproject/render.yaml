@@ -1,15 +1,16 @@
 services:
   - type: web
-    name: django-web
+    name: decisiontrail
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: |
-        echo "Current directory:"
-        pwd
-        echo "Contents:"
-        ls -la
-        echo "Trying to run gunicorn..."
-    gunicorn myproject.wsgi:application
+    startCommand: gunicorn myproject.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: myproject.settings
+    build:
+      cwd: .
+    start:
+      cwd: .
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: myproject.settings
