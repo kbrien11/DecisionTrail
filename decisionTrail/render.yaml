@@ -3,14 +3,12 @@ services:
     name: decisiontrail
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: cd myproject && gunicorn myproject.wsgi:application
+    startCommand: gunicorn myproject.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: myproject.settings
-    build:
-      cwd: .
-    start:
-      cwd: .
+      - key: PYTHONPATH
+        value: /opt/render/project/src
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: myproject.settings
