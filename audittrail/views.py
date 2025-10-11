@@ -225,6 +225,8 @@ def team_audit_summary(request):
     project = request.GET.get("project")
     auth_token = request.COOKIES.get("authToken")
 
+    print(auth_token)
+
     if not auth_token or not verify_token(auth_token):
         return JsonResponse({"error": "Unauthorized"}, status=401)
     if not company_domain:

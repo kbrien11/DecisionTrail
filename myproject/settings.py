@@ -38,11 +38,10 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "*",
+    "https://decisiontrail.onrender.com",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://decisiontrail.onrender.com"]
 
 CORS_ALLOW_CREDENTIALS = True
 

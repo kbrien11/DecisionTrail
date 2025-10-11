@@ -147,7 +147,9 @@ def get_user_teams(auth_token):
 
 def verify_token(token_key):
     try:
+        print("token_key", token_key)
         token = Token.objects.get(key=token_key)
+        print("token", token)
         return token.user  # ✅ Authenticated user
     except Token.DoesNotExist:
         return None
