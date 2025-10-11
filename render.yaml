@@ -17,12 +17,6 @@ services:
       - key: PYTHONPATH
         value: .
       - key: DATABASE_URL
-        fromDatabase:
-          name: auditTrail
-          property: connectionString
+        value: postgresql://postgres:hitraC_7V2nuf@2j#dO@db.vxhoxlxwoyzrbisiwolo.supabase.co:5432/postgres
 
-databases:
-  - name: auditTrail
-    plan: starter
-    databaseName: auditTrail
-    user: auditTrail
+
