@@ -33,12 +33,9 @@ SECRET_KEY = "django-insecure--+6t6lw&qtiasth1daniu=rtxm(t8sj1&e@kw1=y7h)-4zflx!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "http://localhost:3000",
-    "127.0.0.1:8000",
-    "127.0.0.1",
     "localhost",
-    "*",
-    "https://decisiontrail.onrender.com",
+    "127.0.0.1",
+    "decisiontrail.onrender.com",
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://decisiontrail.onrender.com"]
