@@ -107,16 +107,7 @@ WSGI_APPLICATION = "myproject.wsgi.application"
 # }
 
 raw_url = config("DATABASE_URL", default=None)
-parsed = dj_database_url.parse(raw_url, engine="django.db.backends.postgresql")
-
-# Force IPv4 resolution
-try:
-    ipv4_host = socket.gethostbyname(parsed["HOST"])
-    parsed["HOST"] = ipv4_host
-except Exception as e:
-    raise Exception(f"Failed to resolve IPv4 address: {e}")
-
-DATABASES = {"default": parsed}
+DATABASES = {"default": dj_database_url.parse(raw_url, conn_max_age=0)}
 
 
 # Password validation
