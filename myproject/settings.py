@@ -105,17 +105,14 @@ WSGI_APPLICATION = "myproject.wsgi.application"
 # }
 
 
-DATABASE_URL = config("DATABASE_URL")
+raw_url = config("DATABASE_URL")
+parsed = dj_database_url.parse(raw_url, engine="django.db.backends.postgresql")
 
-if not DATABASE_URL:
-    print("databse_url" + DATABASE_URL)
-    raise Exception("DATABASE_URL is not set")
+# Force IPv4 resolution
+ipv4_host = socket.gethostbyname(parsed["HOST"])
+parsed["HOST"] = ipv4_host
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=DATABASE_URL, engine="django.db.backends.postgresql"
-    )
-}
+DATABASES = {"default": parsed}
 
 
 # Password validation
