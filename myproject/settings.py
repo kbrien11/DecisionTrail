@@ -14,6 +14,8 @@ from pathlib import Path
 import dj_database_url
 import os
 from decouple import config
+import socket
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -104,13 +106,15 @@ WSGI_APPLICATION = "myproject.wsgi.application"
 #     },
 # }
 
-
-raw_url = config("DATABASE_URL")
+raw_url = config("DATABASE_URL", default=None)
 parsed = dj_database_url.parse(raw_url, engine="django.db.backends.postgresql")
 
 # Force IPv4 resolution
-ipv4_host = socket.gethostbyname(parsed["HOST"])
-parsed["HOST"] = ipv4_host
+try:
+    ipv4_host = socket.gethostbyname(parsed["HOST"])
+    parsed["HOST"] = ipv4_host
+except Exception as e:
+    raise Exception(f"Failed to resolve IPv4 address: {e}")
 
 DATABASES = {"default": parsed}
 
