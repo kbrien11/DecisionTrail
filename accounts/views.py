@@ -77,7 +77,7 @@ def login(request):
         secure=True,  # Use HTTPS in production
         samesite="None",  # Required for cross-origin cookies
         max_age=3600,
-        domain="https://decisiontrail.onrender.com",
+        domain="decisiontrail.onrender.com",
     )
 
     return response
