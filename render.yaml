@@ -8,15 +8,10 @@ services:
       - key: DJANGO_SETTINGS_MODULE
         value: myproject.settings
       - key: PYTHONPATH
-        value: /opt/render/project/src
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: myproject.settings
+        value: .
       - key: SECRET_KEY
         value: 9edo6aecv)dund-8gw7=u_k*ujiw(#d4#dvo%_x8@vr&ng(tv5
-      - key: PYTHONPATH
-        value: .
       - key: DATABASE_URL
-        value: postgresql://postgres:hitraC_7V2nuf@2j#dO@db.vxhoxlxwoyzrbisiwolo.supabase.co:5432/postgres
+        value: "postgresql://postgres:hitraC_7V2nuf%402j%23dO@db.vxhoxlxwoyzrbisiwolo.supabase.co:5432/postgres"
 
 
