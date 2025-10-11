@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -103,14 +104,29 @@ WSGI_APPLICATION = "myproject.wsgi.application"
 #     },
 # }
 
+
+DATABASE_URL = config("DATABASE_URL")
+
+if not DATABASE_URL:
+    print("databse_url" + DATABASE_URL)
+    raise Exception("DATABASE_URL is not set")
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        engine="django.db.backends.postgresql",
+        default=DATABASE_URL, engine="django.db.backends.postgresql"
     )
 }
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "postgres",
+#         "USER": "postgres",
+#         "PASSWORD": "hitraC_7V2nuf@2j#dO",
+#         "HOST": "db.vxhoxlxwoyzrbisiwolo.supabase.co",
+#         "PORT": "5432",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
