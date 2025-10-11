@@ -74,10 +74,9 @@ def login(request):
         key="authToken",
         value=token.key,
         httponly=True,
-        secure=True,  # Use HTTPS in production
-        samesite="None",  # Required for cross-origin cookies
-        max_age=3600,
-        domain="decisiontrail.onrender.com",
+        secure=False,
+        samesite="Lax",
+        domain="localhost",
     )
 
     return response
