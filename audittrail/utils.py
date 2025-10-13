@@ -56,11 +56,17 @@ def open_decision_modal(trigger_id, decision_text, user_id, username):
                 },
                 {
                     "type": "input",
-                    "block_id": "team",
-                    "label": {"type": "plain_text", "text": "Team"},
+                    "block_id": "teams",
+                    "label": {"type": "plain_text", "text": "Teams (comma-separated)"},
+                    "element": {"type": "plain_text_input", "action_id": "teams_input"},
+                },
+                {
+                    "type": "input",
+                    "block_id": "pod",
+                    "label": {"type": "plain_text", "text": "Pod"},
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "team_input",
+                        "action_id": "pod_input",
                         "placeholder": {
                             "type": "plain_text",
                             "text": "e.g. Engineering, Finance, Product",

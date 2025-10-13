@@ -70,10 +70,11 @@ def slack_interactivity(request):
 
             summary = state["summary"]["summary_input"]["value"]
             context = state["context"]["context_input"]["value"]
-            team = state["team"]["team_input"]["value"]
+            pod = state["pod"]["pod_input"]["value"]
             rationale = state["rationale"]["rationale_input"]["value"]
             jira_url = state["jira"]["jira_input"]["value"]
             tags = state["tags"]["tags_input"]["value"]
+            teams = state["tags"]["teams_input"]["value"]
             state = payload["view"]["state"]["values"]
 
             # Check if the checkbox was selected
@@ -93,7 +94,8 @@ def slack_interactivity(request):
                 company_domain=company_domain,
                 summary=summary,
                 context=context,
-                team=team,
+                pod=pod,
+                teams=teams,
                 tags=tags,
                 source="slack",
                 review_flag=review_flag,
@@ -155,8 +157,8 @@ def get_decisions_by_company(request):
     if not company_domain:
         return JsonResponse({"error": "Missing company_domain"}, status=400)
 
-    # if not auth_token or not verify_token(auth_token):
-    #     return JsonResponse({"error": "Unauthorized"}, status=401)
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
 
     user_teams = get_user_teams(auth_token)
 
@@ -227,8 +229,8 @@ def team_audit_summary(request):
 
     print(auth_token)
 
-    # if not auth_token or not verify_token(auth_token):
-    #     return JsonResponse({"error": "Unauthorized"}, status=401)
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
     if not company_domain:
         return JsonResponse({"error": "Missing company_domain"}, status=400)
 
@@ -253,8 +255,8 @@ def decision_summary_by_team(request):
 
     auth_token = request.COOKIES.get("authToken")
 
-    # if not auth_token or not verify_token(auth_token):
-    #     return JsonResponse({"error": "Unauthorized"}, status=401)
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
 
     if not company_domain:
         return JsonResponse({"error": "Missing company_domain"}, status=400)
