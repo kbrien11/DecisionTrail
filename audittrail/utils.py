@@ -138,7 +138,7 @@ def get_user_teams(auth_token):
         teams = (
             user.projects
             if isinstance(user.projects, list)
-            else list(user.teams.values_list("name", flat=True))
+            else list(user.projects.values_list("name", flat=True))
         )
         return teams
     except Token.DoesNotExist:

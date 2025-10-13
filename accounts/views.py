@@ -74,9 +74,9 @@ def login(request):
         key="authToken",
         value=token.key,
         httponly=True,
-        secure=False,
-        samesite="Lax",
-        domain="localhost",
+        secure=True,
+        samesite="None",
+        domain="decisiontrail.onrender.com",
     )
 
     return response
