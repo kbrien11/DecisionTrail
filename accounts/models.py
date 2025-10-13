@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import ArrayField
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True, max_length=20)
     username = models.CharField(unique=True, max_length=20)
-    company = models.CharField(max_length=50, blank=True, unique=True)
+    company = models.CharField(max_length=50, blank=True, unique=False)
     projects = ArrayField(
         base_field=models.CharField(max_length=100),
         blank=True,
