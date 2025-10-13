@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             company=validated_data["company"],
             password=validated_data["password"],
+            projects=validated_data["projects"],
             is_active=False,
         )
         print(user)
