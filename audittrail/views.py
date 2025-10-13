@@ -152,7 +152,9 @@ def get_decisions_by_company(request):
     project = request.GET.get("project")
     page_number = int(request.GET.get("page", 1))  # default to page 1
     page_size = int(request.GET.get("page_size", 2))
-    auth_token = request.COOKIES.get("authToken")  # default to 2 per page
+    auth_token = request.COOKIES.get("authToken")
+    team = request.GET.get("team")
+    # default to 2 per page
 
     if not company_domain:
         return JsonResponse({"error": "Missing company_domain"}, status=400)
@@ -163,7 +165,9 @@ def get_decisions_by_company(request):
     user_teams = get_user_teams(auth_token)
 
     # Start with base queryset
-    decisions = Decision.objects.filter(company_domain=company_domain, project=project)
+    decisions = Decision.objects.filter(
+        company_domain=company_domain, project=project, team=team
+    )
 
     # Apply dynamic filters
     allowed_filters = {
