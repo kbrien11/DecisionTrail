@@ -36,9 +36,14 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "decisiontrail.onrender.com",
+    "mellow-bonbon-9d9516.netlify.app",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "https://decisiontrail.onrender.com"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://decisiontrail.onrender.com",
+    "https://mellow-bonbon-9d9516.netlify.app",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
