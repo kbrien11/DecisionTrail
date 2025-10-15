@@ -153,11 +153,11 @@ def get_decisions_by_company(request):
     page_number = int(request.GET.get("page", 1))  # default to page 1
     page_size = int(request.GET.get("page_size", 2))
     auth_token = request.COOKIES.get("authToken")
-    status = request.GET.get("status")
+    filtered_status = request.GET.get("status")
     team = request.GET.get("team")
     # default to 2 per page
 
-    print(status)
+    print(filtered_status)
 
     if not company_domain:
         return JsonResponse({"error": "Missing company_domain"}, status=400)
@@ -172,8 +172,8 @@ def get_decisions_by_company(request):
         company_domain=company_domain, project=project, team=team
     )
 
-    if status:
-        decisions = decisions.filter(status=status)
+    if filtered_status:
+        decisions = decisions.filter(status=filtered_status)
 
     # Apply dynamic filters
     allowed_filters = {
