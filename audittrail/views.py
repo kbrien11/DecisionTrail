@@ -205,6 +205,7 @@ def get_decisions_by_company(request):
             "created_at": d.created_at.isoformat(),
             "username": d.username,
             "rationale": d.rationale,
+            "status": d.status,
         }
         for d in page_obj
     ]
