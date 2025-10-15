@@ -153,8 +153,11 @@ def get_decisions_by_company(request):
     page_number = int(request.GET.get("page", 1))  # default to page 1
     page_size = int(request.GET.get("page_size", 2))
     auth_token = request.COOKIES.get("authToken")
+    status = request.GET.get("status")
     team = request.GET.get("team")
     # default to 2 per page
+
+    print(status)
 
     if not company_domain:
         return JsonResponse({"error": "Missing company_domain"}, status=400)
@@ -169,6 +172,9 @@ def get_decisions_by_company(request):
         company_domain=company_domain, project=project, team=team
     )
 
+    if status:
+        decisions = decisions.filter(status=status)
+
     # Apply dynamic filters
     allowed_filters = {
         "tags": "tags__icontains",
@@ -176,11 +182,11 @@ def get_decisions_by_company(request):
         "username": "username__icontains",
         "context": "context__icontains",
         "rationale": "rationale__icontains",
+        "status": "status__iexact",  # Case-insensitive
     }
     for param, lookup in allowed_filters.items():
         value = request.GET.get(param)
         if value:
-            # Cast booleans and numbers if needed
             if param == "review_flag":
                 value = value.lower() == "true"
             elif param == "confidence":
@@ -230,6 +236,7 @@ def get_decisions_by_company(request):
 def team_audit_summary(request):
     company_domain = request.GET.get("company_domain")
     project = request.GET.get("project")
+
     auth_token = request.COOKIES.get("authToken")
 
     print(auth_token)
