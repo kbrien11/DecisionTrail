@@ -300,9 +300,7 @@ def decision_summary_by_team(request):
 
 
 @api_view(["PUT"])
-def update_decision(request):
-    id = request.GET.get("id")
-
+def update_decision(request, id):
     try:
         decision = Decision.objects.get(id=id)
         print(decision.__dict__)
