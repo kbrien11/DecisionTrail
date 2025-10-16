@@ -23,4 +23,5 @@ urlpatterns = [
         views.decision_summary_by_team,
         name="get_decision_summary_by_team",
     ),
+    path("api/decisions/update", views.update_decision, name="update-decision"),
 ]

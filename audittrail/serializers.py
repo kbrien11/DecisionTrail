@@ -1,4 +1,4 @@
-from .models import CustomPaginator
+from .models import CustomPaginator, Decision
 from rest_framework import serializers
 
 
@@ -12,3 +12,9 @@ class PaginatorSerializer(serializers.ModelSerializer):
             "has_next",
             "has_previous",
         ]
+
+
+class DecisionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Decision
+        fields = "__all__"  # or list specific fields if needed

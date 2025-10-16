@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.db.models import Count, Q
 import requests
 from rest_framework import status
-from .serializers import PaginatorSerializer
+from .serializers import DecisionSerializer, PaginatorSerializer
 from .utils import open_decision_modal, get_user_teams, verify_token
 from .models import Decision
 from rest_framework.decorators import action, api_view
@@ -297,3 +297,23 @@ def decision_summary_by_team(request):
     ]
 
     return JsonResponse({"data": result})
+
+
+@api_view(["PUT"])
+def update_decision(request):
+    id = request.GET.get("id")
+
+    try:
+        decision = Decision.objects.get(id=id)
+        print(decision.__dict__)
+    except Decision.DoesNotExist:
+        return JsonResponse(
+            {"error": "Decision not found"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    serializer = DecisionSerializer(decision, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+    return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
