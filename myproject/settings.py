@@ -37,12 +37,22 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "decisiontrail.onrender.com",
     "mellow-bonbon-9d9516.netlify.app",
+    "e6b0a5bb9a47.ngrok-free.app",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://decisiontrail.onrender.com",
     "https://mellow-bonbon-9d9516.netlify.app",
+    "https://e6b0a5bb9a47.ngrok-free.app",
+]
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PATCH",
+    "PUT",
+    "DELETE",
+    "OPTIONS",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
