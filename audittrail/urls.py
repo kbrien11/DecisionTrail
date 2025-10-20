@@ -26,4 +26,7 @@ urlpatterns = [
     path(
         "api/decisions/update/<int:id>", views.update_decision, name="update-decision"
     ),
+    path(
+        "api/decisions/delete/<int:id>", views.delete_decision, name="update-decision"
+    ),
 ]

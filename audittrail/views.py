@@ -301,6 +301,11 @@ def decision_summary_by_team(request):
 
 @api_view(["PUT"])
 def update_decision(request, id):
+
+    auth_token = request.COOKIES.get("authToken")
+
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
     try:
         decision = Decision.objects.get(id=id)
         print(decision.__dict__)
@@ -315,3 +320,24 @@ def update_decision(request, id):
         serializer.save()
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["DELETE"])
+def delete_decision(request, id):
+
+    auth_token = request.COOKIES.get("authToken")
+
+    if not auth_token or not verify_token(auth_token):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+    try:
+        decision = Decision.objects.get(id=id)
+        decision.delete()
+        return JsonResponse(
+            {"message": " Decision Audit record deleted"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
+    except decision.DoesNotExist:
+        return JsonResponse(
+            {"error": "Decision Audit record not found"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
