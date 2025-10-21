@@ -65,12 +65,10 @@ def slack_interactivity(request):
             username = payload["user"].get("username") or payload["user"].get("name")
             company_id = payload["team"]["id"]
             company_domain = payload["team"]["domain"]
-
             state = payload["view"]["state"]["values"]
-
             summary = state["summary"]["summary_input"]["value"]
             context = state["context"]["context_input"]["value"]
-            pod = state["pod"]["pod_input"]["value"]
+            project = state["project"]["project_input"]["value"]
             rationale = state["rationale"]["rationale_input"]["value"]
             jira_url = state["jira"]["jira_input"]["value"]
             tags = state["tags"]["tags_input"]["value"]
@@ -94,7 +92,7 @@ def slack_interactivity(request):
                 company_domain=company_domain,
                 summary=summary,
                 context=context,
-                pod=pod,
+                project=project,
                 team=teams,
                 tags=tags,
                 source="slack",
