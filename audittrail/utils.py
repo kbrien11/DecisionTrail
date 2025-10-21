@@ -62,11 +62,11 @@ def open_decision_modal(trigger_id, decision_text, user_id, username):
                 },
                 {
                     "type": "input",
-                    "block_id": "pod",
-                    "label": {"type": "plain_text", "text": "Pod"},
+                    "block_id": "project",
+                    "label": {"type": "plain_text", "text": "Project"},
                     "element": {
                         "type": "plain_text_input",
-                        "action_id": "pod_input",
+                        "action_id": "project_input",
                         "placeholder": {
                             "type": "plain_text",
                             "text": "e.g. Engineering, Finance, Product",

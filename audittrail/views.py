@@ -74,7 +74,7 @@ def slack_interactivity(request):
             rationale = state["rationale"]["rationale_input"]["value"]
             jira_url = state["jira"]["jira_input"]["value"]
             tags = state["tags"]["tags_input"]["value"]
-            teams = state["tags"]["teams_input"]["value"]
+            teams = state["teams"]["teams_input"]["value"]
             state = payload["view"]["state"]["values"]
 
             # Check if the checkbox was selected
@@ -95,7 +95,7 @@ def slack_interactivity(request):
                 summary=summary,
                 context=context,
                 pod=pod,
-                teams=teams,
+                team=teams,
                 tags=tags,
                 source="slack",
                 review_flag=review_flag,
@@ -333,8 +333,7 @@ def delete_decision(request, id):
         decision = Decision.objects.get(id=id)
         decision.delete()
         return JsonResponse(
-            {"message": " Decision Audit record deleted"},
-            status=status.HTTP_204_NO_CONTENT,
+            {"message": " Decision Audit record deleted"}, status=status.HTTP_200_OK
         )
     except decision.DoesNotExist:
         return JsonResponse(
